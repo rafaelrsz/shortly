@@ -16,8 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from . import views as shortly_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
+    path('', include('users.urls')),
+    path("", shortly_views.home, name="home"),
+    path("tags", shortly_views.tags, name="tags"),
+    path("links", shortly_views.links, name="links"),
 ]

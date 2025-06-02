@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+    Crie sua conta - Shortly
+{% endblock %}
+
+{% block conteudo %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 bg-white p-4 rounded shadow">
+
+            <h2 class="text-center mb-4 text-primary fw-bold">Cadastro de Usuário</h2>
+
+            {% if messages %}
+            <div class="mb-3">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} text-center" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <form action="{% url 'register' %}" method="POST" novalidate>
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label for="usuario" class="form-label">Nome de usuário</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="usuario" 
+                        name="usuario" 
+                        placeholder="ex: joaosilva123"
+                        required
+                    >
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">E-mail</label>
+                    <input 
+                        type="email" 
+                        class="form-control" 
+                        id="email" 
+                        name="email" 
+                        placeholder="voce@email.com"
+                        required
+                    >
+                </div>
+
+                <div class="mb-3">
+                    <label for="senha" class="form-label">Senha</label>
+                    <input 
+                        type="password" 
+                        class="form-control" 
+                        id="senha" 
+                        name="senha" 
+                        placeholder="********"
+                        required
+                    >
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">
+                        Criar Conta
+                    </button>
+                </div>
+            </form>
+
+            <p class="mt-4 text-center text-muted">
+                Já tem uma conta? <a href="{% url 'login' %}" class="text-decoration-none">Entrar</a>
+            </p>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,3 +1,4 @@
 from django.db import models
-
-# Create your models here.
+from .entities.shorturl import *
+from .entities.click import *
+from .entities.urltag import *
