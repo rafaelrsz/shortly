@@ -1,5 +1,30 @@
 {% extends "base.html" %}
 
 {% block conteudo %}
-<h1>Home</h1>
+<div class="container mt-4">
+    <h2>Encurtar Link</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label">URL original</label>
+            <input type="url" name="original_url" class="form-control" placeholder="https://exemplo.com" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Tag</label>
+            <select name="tag_id" class="form-select" required>
+                <option value="">Selecione uma tag</option>
+                {% for tag in tags %}
+                    <option value="{{ tag.id }}">{{ tag.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Encurtar</button>
+    </form>
+
+    {% if short_code %}
+        <div class="alert alert-success mt-4">
+            Link encurtado com sucesso: <a href="{% url 'redirect_short_url' short_code %}" target="_blank">{{ request.build_absolute_uri|cut:request.get_full_path }}r/{{ short_code }}</a>
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

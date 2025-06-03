@@ -1,11 +1,55 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from core.entities.urltag import URLTag
+from core.utils import generate_short_code
+from core.entities.shorturl import ShortURL
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from core.entities.click import Click
 
 @login_required(login_url='login')
 def home(request):
-    if request.method == "GET":
-        return render(request, 'home.html')
+    tags = URLTag.objects.filter(user=request.user)
+
+    if request.method == "POST":
+        original_url = request.POST.get("original_url")
+        tag_id = request.POST.get("tag_id")
+
+        if original_url and tag_id:
+            short_code = generate_short_code()
+            while ShortURL.objects.filter(short_code=short_code).exists():
+                short_code = generate_short_code()
+
+            short_url = ShortURL.objects.create(
+                original_url=original_url,
+                short_code=short_code,
+                user=request.user
+            )
+            tag = URLTag.objects.filter(id=tag_id, user=request.user).first()
+            if tag:
+                short_url.tags.add(tag)
+
+            return render(request, 'home.html', {
+                'tags': tags,
+                'short_code': short_url.short_code
+            })
+
+    return render(request, 'home.html', {'tags': tags})
+
+
+def redirect_short_url(request, short_code):
+    short_url = get_object_or_404(ShortURL, short_code=short_code, is_active=True)
+
+    # Registrar clique
+    Click.objects.create(
+        short_url=short_url,
+        ip_address=request.META.get('REMOTE_ADDR'),
+        user_agent=request.META.get('HTTP_USER_AGENT', ''),
+        referrer=request.META.get('HTTP_REFERER', '')
+    )
+
+    return HttpResponseRedirect(short_url.original_url)
+
     
 @login_required(login_url='login')
 def tags(request):

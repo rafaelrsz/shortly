@@ -25,4 +25,5 @@ urlpatterns = [
     path("", shortly_views.home, name="home"),
     path("tags", shortly_views.tags, name="tags"),
     path("links", shortly_views.links, name="links"),
+    path('r/<str:short_code>/', shortly_views.redirect_short_url, name='redirect_short_url'),
 ]
