@@ -2,6 +2,7 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout as logout_django
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 def login(request):
     if request.method == "GET":
@@ -39,7 +40,8 @@ def register(request):
         User.objects.create_user(username=usuario, email=email, password=senha)
         messages.success(request, f"Usuário {usuario} cadastrado com sucesso!")
         return redirect('login')
-    
+
+@login_required(login_url='login')
 def logout(request):
     logout_django(request)
     return redirect('login')
