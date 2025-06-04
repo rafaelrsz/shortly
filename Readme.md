@@ -1,8 +1,3 @@
-# TODO'S
-
-* Completar o crud do encurtador em "meus links" na view /links
-  * Visualizar e apagar links do usuário logado (acho que não precisa ter edição)
-
 # como rodar
 
 ## clonar o repositório

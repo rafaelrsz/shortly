@@ -80,5 +80,19 @@ def tags(request):
 
 @login_required(login_url='login')
 def links(request):
-    if request.method == "GET":
-        return render(request, 'links.html')
+    user_links = ShortURL.objects.filter(user=request.user).prefetch_related('tags')
+    
+    for link in user_links:
+        link.clicks_count = Click.objects.filter(short_url=link).count()
+    
+    if request.method == 'POST' and 'delete_link' in request.POST:
+        link_id = request.POST.get('link_id')
+        ShortURL.objects.filter(id=link_id, user=request.user).delete()
+        return redirect('links')
+
+    base_url = request.build_absolute_uri('/')[:-1] 
+    
+    return render(request, 'links.html', {
+        'links': user_links,
+        'base_url': base_url
+    })
