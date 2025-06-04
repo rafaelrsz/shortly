@@ -12,7 +12,7 @@
 - rodar o comando `pip install virtualenv`
 - criar o virtualvenv com o comando `virtualenv venv`
 - ativar o ambiente virtual com o comando `source venv/Scripts/activate
-` (no bash) e `source ./venv/Scripts/activate
+` (no bash) e `.\venv\Scripts\Activate.ps1
 ` (no PowerShell)
 - para desativar é só usar o comando `deactivate`
 
